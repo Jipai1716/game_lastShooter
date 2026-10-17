@@ -1,0 +1,19 @@
+# 构建产物
+build/
+*.exe
+*.o
+*.obj
+*.gch
+*.res
+
+# 存档与日志
+lastShooter_record.txt
+*.log
+*.pdb
+*.ilk
+
+# 编辑器/系统
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
