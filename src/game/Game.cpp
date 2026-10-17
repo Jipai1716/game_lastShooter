@@ -273,7 +273,10 @@ void Game::startRun()
 
 void Game::endRun()
 {
-    const RunStats& stats = world_.stats();
+    // 结算界面用的是"死亡那一瞬间"的快照：
+    // 死亡后 World 还在后台慢慢跑，不能让它的击杀继续改分数。
+    finalStats_ = world_.stats();
+    const RunStats& stats = finalStats_;
     if (stats.score > record_.bestScore) {
         record_.bestScore = stats.score;
         newRecord_ = true;
@@ -432,7 +435,7 @@ void Game::renderGameOver()
     canvas_.desaturate(0.35f);
     canvas_.fillScreen(withAlpha(palette::kInk, 0.72f));
 
-    const RunStats& stats = world_.stats();
+    const RunStats& stats = finalStats_;
 
     ui::Font title = ui::fontTitle();
     title.size = 58;

@@ -14,9 +14,6 @@
 
 namespace ls {
 
-// 玩家朝向的预旋转帧数
-constexpr int kHeroFrameCount = 40;
-
 struct Assets
 {
     std::string root;     // assets 目录（绝对路径）
@@ -28,7 +25,6 @@ struct Assets
     // ---------------------------------------------------------- 玩家 ----
     Sprite hero;                                    // 基础朝向（朝上）
     Sprite heroLeft;                                // 水平镜像（朝左时用）
-    std::vector<Sprite> heroFrames;                 // 预旋转 40 帧（备用/装饰）
 
     // ---------------------------------------------------------- 敌人 ----
     Sprite zombie;
@@ -58,9 +54,6 @@ struct Assets
     // 加载全部资源；rootPath 为仓库根目录（会自动寻找 assets/）
     bool load(const std::string& executableDirectory);
     bool loaded() const { return loaded_; }
-
-    // 取玩家朝向帧
-    const Sprite& heroFrame(float aimRadians) const;
 
 private:
     bool loaded_ = false;

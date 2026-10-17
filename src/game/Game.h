@@ -70,6 +70,7 @@ private:
     Hud hud_;
     ParticleSystem ambience_;
     Record record_;
+    RunStats finalStats_;   // 结算界面用的死亡瞬间快照
     AppOptions options_;
 
     std::string exeDirectory_;

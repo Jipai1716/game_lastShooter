@@ -133,14 +133,6 @@ bool Assets::load(const std::string& executableDirectory)
     const Rgba kOutline = rgba(6, 10, 18, 230);
     hero = img("hero.png").scaledNearest(2).outline(kOutline, 1);
     heroLeft = hero.mirroredX();
-    if (!hero.empty()) {
-        heroFrames.reserve(kHeroFrameCount);
-        for (int i = 0; i < kHeroFrameCount; ++i) {
-            const float radians = static_cast<float>(i) * kTau / static_cast<float>(kHeroFrameCount);
-            // 素材朝上（-y），运行时角度 0 指向 +x，因此补 90°
-            heroFrames.push_back(hero.rotated(radians + kPi * 0.5f));
-        }
-    }
 
     // ------------------------------------------------------------ 敌人 ----
     zombie = img("enemy.png").scaledNearest(2).outline(kOutline, 1);
@@ -171,18 +163,6 @@ bool Assets::load(const std::string& executableDirectory)
     LS_LOG("assets loaded from %s (hero %dx%d, bg %dx%d)", root.c_str(), hero.width(), hero.height(),
            background.width(), background.height());
     return loaded_;
-}
-
-const Sprite& Assets::heroFrame(float aimRadians) const
-{
-    if (heroFrames.empty()) return hero;
-    // 帧序号：素材朝上，需补 90°
-    float normalized = (aimRadians + kPi * 0.5f) / kTau;
-    normalized -= std::floor(normalized);
-    int index = static_cast<int>(normalized * static_cast<float>(kHeroFrameCount) + 0.5f);
-    index %= kHeroFrameCount;
-    if (index < 0) index += kHeroFrameCount;
-    return heroFrames[static_cast<size_t>(index)];
 }
 
 Assets& assets()
