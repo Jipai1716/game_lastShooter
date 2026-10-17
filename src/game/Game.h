@@ -20,6 +20,7 @@ struct AppOptions
     bool mute = false;
     int selftestFrames = 0;       // >0 时只跑无头模拟
     std::string captureDir;       // 非空时按脚本截图后退出（开发自测用）
+    bool dumpInput = false;       // 把输入状态写到 inputdump.txt（调试用）
 };
 
 class Game
@@ -75,6 +76,7 @@ private:
     float realTime_ = 0.0f;
     float stateTime_ = 0.0f;
     float deathTimer_ = 0.0f;
+    float unfocusedTimer_ = 0.0f;
     float accumulator_ = 0.0f;
     bool quit_ = false;
     bool newRecord_ = false;

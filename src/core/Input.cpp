@@ -70,7 +70,7 @@ void Input::poll(const Vec2& mouseReference)
         if (vk != 0) {
             now = (GetAsyncKeyState(vk) & 0x8000) != 0;
         }
-        if (!state_.focused && vk != VK_ESCAPE) now = false; // 失焦不吃输入
+        if (!state_.focused) now = false; // 失焦时不吃任何输入，避免误操作
         const bool was = previous_[i];
         state_.down[i] = now;
         state_.pressed[i] = now && !was;

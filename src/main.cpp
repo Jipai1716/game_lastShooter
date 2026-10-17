@@ -76,6 +76,9 @@ int runGame(const std::vector<std::string>& arguments)
         } else if (argument.rfind("--capture=", 0) == 0) {
             ensureConsole();
             options.captureDir = argument.substr(10);
+        } else if (argument == "--dumpinput") {
+            ensureConsole();
+            options.dumpInput = true;
         } else if (argument == "--verbose") {
             ensureConsole();
             ls::setLogEnabled(true);
@@ -86,7 +89,8 @@ int runGame(const std::vector<std::string>& arguments)
                 "  --autoplay        机器人自动演示\n"
                 "  --mute            静音\n"
                 "  --selftest[=N]    无头自测 N 帧（默认 3000）\n"
-                "  --capture=DIR     按脚本截图后退出\n");
+                "  --capture=DIR     按脚本截图后退出\n"
+                "  --dumpinput       把每帧输入状态写到 inputdump.txt（排查输入问题）\n");
             return 0;
         }
     }

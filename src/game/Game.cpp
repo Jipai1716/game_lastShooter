@@ -100,6 +100,28 @@ int Game::run(const AppOptions& options)
         input_.poll(canvas_.center());
         if (input_.state().quit) break;
 
+        if (options_.dumpInput) {
+            static int dumpFrame = 0;
+            ++dumpFrame;
+            if (dumpFrame % 30 == 0) {
+                FILE* fp = std::fopen("inputdump.txt", "a");
+                if (fp != nullptr) {
+                    const InputState& s = input_.state();
+                    std::fprintf(fp, "frame=%d time=%.2f focused=%d state=%d down:", dumpFrame,
+                                 static_cast<double>(realTime_), s.focused ? 1 : 0, static_cast<int>(state_));
+                    for (int i = 0; i < kKeyCount; ++i) {
+                        if (s.down[i]) std::fprintf(fp, "%d,", i);
+                    }
+                    std::fprintf(fp, " pressed:");
+                    for (int i = 0; i < kKeyCount; ++i) {
+                        if (s.pressed[i]) std::fprintf(fp, "%d,", i);
+                    }
+                    std::fprintf(fp, "\n");
+                    std::fclose(fp);
+                }
+            }
+        }
+
         InputState frameInput = options_.autoplay ? makeBotInput(frameTime) : input_.state();
         accumulator_ += frameTime;
         int steps = 0;
@@ -184,6 +206,19 @@ void Game::updatePlaying(float dt, const InputState& input)
         stateTime_ = 0.0f;
         audio().play(Sfx::Empty, 0.4f);
         return;
+    }
+
+    // 切走窗口自动暂停（只对真人操作生效，机器人始终"专注"）
+    if (!options_.autoplay && !input.focused) {
+        unfocusedTimer_ += dt;
+        if (unfocusedTimer_ > 0.35f) {
+            unfocusedTimer_ = 0.0f;
+            state_ = State::Paused;
+            stateTime_ = 0.0f;
+            return;
+        }
+    } else {
+        unfocusedTimer_ = 0.0f;
     }
 
     const float scale = world_.playerDead() ? cfg::kDeathSlowmo : 1.0f;

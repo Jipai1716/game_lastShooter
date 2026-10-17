@@ -8,6 +8,7 @@ build/
 
 # 存档与日志
 lastShooter_record.txt
+inputdump.txt
 *.log
 *.pdb
 *.ilk
